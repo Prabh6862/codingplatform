@@ -1,0 +1,66 @@
+body{
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
+header div{
+    display: flex;
+    align-items: center;
+}
+nav{
+    display: inline;
+    margin-right: 200px;
+}
+nav ul li{
+    display: inline;
+    margin-right: 20px;
+}
+nav ul li a{
+    text-decoration: none;
+    font-weight: bold;
+}
+h1{
+    margin: 0 200px;
+    align-items: center;
+    text-align: center;
+}
+.box1{
+    height: 300px;
+    width: 30rem;
+    background-color: #e0e0e0 ;
+    border: 5px solid black;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 20px; 
+    float: left;
+}
+.box2 {
+    height: 600px;
+    width: 40rem;
+    background-color: #e0e0e0 ;
+    border: 5px solid black;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 20px; 
+    float: right;
+}
+.code{
+    height: 560px;
+    width: 39rem;
+}
+.que {
+    height: 275px;
+    width: 28rem;
+}
+.btn1{
+    background-color: aqua;
+    color: black;
+    border: 2px solid black;
+    border-radius: 5px;
+    margin-left: 36rem;
+    box-shadow: 2px 2px 5px;
+}
+.btn1:hover{
+    background-color: blue;
+    color: wheat;
+}

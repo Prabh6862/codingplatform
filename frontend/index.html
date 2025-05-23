@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div>
+            <nav>
+                <ul>
+                    <li><a href="./explore.html" target="_blank">Explore</a></li>
+                    <li><a href="./problems.html" target="_blank">Problems</a></li>
+                    <li><a href="./contest.html" target="_blank">Contest</a></li>
+                </ul>
+            </nav>
+            <h1>Code Forge</h1>
+            <nav>
+                <ul>
+                    <li><a href="./about.html" target="_blank">About</a></li>
+                    <li><a href="./notifications.html" target="_blank">Notifications</a></li>
+                    <li><a href="./profile.html" target="_blank">Profile</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <div class="box1">
+        <textarea  placeholder=" Enter the question"   class="que" name="" id=""></textarea>
+    </div>
+    <div class="box2">
+        <label class="lanaguages" for="languages">Choose a programming lanaguage</label>
+        <select name="lanaguages" id="lanaguages">
+            <option value="c">C</option>
+            <option value="cpp">C++</option>
+            <option value="java">Java</option>
+            <option value="python">Python</option>
+            <option value="javascript">Javascript</option>
+        </select>
+        <textarea  placeholder = "Enter the code here" class="code" name="" id="codeid"></textarea>
+        <button class="btn1" onclick="submission()">submit</button>
+    </div>
+    <script src="index.js"></script>
+</body>
+</html> 
