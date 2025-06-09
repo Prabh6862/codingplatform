@@ -21,4 +21,31 @@ router.get('/question', async (req, res) => {
     }
 });
 
+router.post('/input', async (req, res) => {
+    const { question, category, testcases } = req.body;
+
+    if (!question) {
+        return res.status(400).json({ error: 'Question field is required.' });
+    }
+    try {
+        const query = `
+            INSERT INTO questions (question, category, testcases)
+            VALUES ($1, $2, $3)
+            RETURNING *;
+        `;
+        const values = [question, category, testcases];
+
+        const result = await db.query(query, values);
+
+        console.log("Question data inserted:", result.rows[0]);
+
+        res.status(201).json({
+            message: "Question inserted successfully",
+            question: result.rows[0],
+        });
+    } catch (err) {
+        console.error("Error while inserting question:", err);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
 export default router;
