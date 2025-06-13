@@ -1,5 +1,5 @@
 import express from 'express';
-import db from "./db.js";
+import db from "../middleware/db.js";
 
 const router = express.Router();
 
@@ -7,6 +7,7 @@ async function fetch_testcases(questionId) {
     const query = 'SELECT testcases FROM questions WHERE quesid = $1';
     const { rows } = await db.query(query, [questionId]);
     return rows.length ? rows[0].testcases : null;
+
 }
 
 function getDockerCommand(language, codeFilePath, inputFilePath) {

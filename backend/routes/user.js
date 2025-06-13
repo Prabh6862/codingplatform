@@ -1,6 +1,11 @@
 import express from 'express';
-import db from '../db.js';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+import db from '../middleware/db.js';
 import adduser from '../insertdata.js';
+
+dotenv.config();
 const router = express.Router();
 
 router.post('/register', async (req, res) => {
@@ -16,6 +21,8 @@ router.post('/register', async (req, res) => {
             return res.status(400).json({ message: "User already exists" });
         }
 
+       // const hashedPassword = await bcrypt.hash(password, 20);
+        
         // Insert user
         const newUser = await addUserData(username, user_email, password);
         res.status(201).json({ message: "User registered", user: newUser });
@@ -25,7 +32,6 @@ router.post('/register', async (req, res) => {
         res.status(500).json({ message: "Server error" });
     }
 });
-
 
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
@@ -42,11 +48,23 @@ router.post('/login', async (req, res) => {
 
         const user = userQuery.rows[0];
 
-        if (user.password === password) {
-            res.status(200).json({ message: "Login successful", user });
-        } else {
-            res.status(401).json({ message: "Incorrect password" });
-        }
+        // const isMatch = await bcrypt.compare(password, user.password);
+        // if (!isMatch) {
+        //     return res.status(401).json({ message: "Incorrect password" });
+        // }
+        const secretKey='gomonkey';
+        const token = jwt.sign(
+            {
+                userid: user.userid,
+                username: user.username,
+                email: user.user_email,
+            },
+            secretKey
+            ,
+            // { expiresIn: process.env.JWT_EXPIRES_IN }
+        );
+
+        res.status(200).json({ message: "Login successful", token });   
 
     } catch (error) {
         console.error("Login error:", error);

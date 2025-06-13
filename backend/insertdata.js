@@ -1,4 +1,4 @@
-import db from "./db.js";
+import db from "./middleware/db.js";
 async function adduser(userid , username , user_email , password){
     try{
         const query = `insert into users(userid , username , user_email , password) 
