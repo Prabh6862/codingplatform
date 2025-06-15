@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CodePlatform – LeetCode Style</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    /* ... (same CSS as before, omitted for brevity) ... */
+    :root {
+      --primary: #1976d2;
+      --primary-dark: #115293;
+      --bg: #f5f6fa;
+      --header-bg: #fff;
+      --card-bg: #fff;
+      --border: #eee;
+      --shadow: 0 2px 8px rgba(0,0,0,0.05);
+      --easy: #27ae60;
+      --medium: #f4b942;
+      --hard: #e74c3c;
+      --font: 'Segoe UI', 'Roboto', 'Helvetica', Arial, sans-serif;
+      --editor-bg: #282c34;
+      --editor-fg: #f0f0f0;
+      --result-bg: #23272e;
+      --result-fg: #e1e1e1;
+    }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: var(--bg);
+      color: #222;
+    }
+    header {
+      background: var(--header-bg);
+      box-shadow: var(--shadow);
+      padding: 1rem 0;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2vw;
+    }
+    .brand {
+      font-weight: bold;
+      font-size: 1.5em;
+      color: var(--primary);
+      text-decoration: none;
+    }
+    nav {
+      display: flex;
+      gap: 1.5em;
+      align-items: center;
+    }
+    nav a, nav button {
+      color: var(--primary);
+      background: none;
+      border: none;
+      font-size: 1em;
+      padding: 0.3em 0.7em;
+      cursor: pointer;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background 0.1s;
+    }
+    nav a.active, nav a:hover, nav button:hover {
+      background: var(--primary);
+      color: #fff;
+    }
+    .main {
+      display: none;
+    }
+    .main.active {
+      display: block;
+    }
+    /* Problem list (Home) */
+    #problem-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+    }
+    .problem-card {
+      background: var(--card-bg);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 1.1em 1.5em;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: box-shadow 0.15s;
+    }
+    .problem-card:hover {
+      box-shadow: 0 4px 18px rgba(25, 118, 210, 0.09);
+    }
+    .problem-title {
+      font-size: 1.07em;
+      font-weight: 500;
+      color: var(--primary-dark);
+      text-decoration: none;
+    }
+    .problem-meta {
+      display: flex;
+      gap: 1.1em;
+      align-items: center;
+    }
+    .diff-tag {
+      padding: 0.22em 0.9em;
+      border-radius: 999px;
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.93em;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .diff-easy { background: var(--easy); }
+    .diff-medium { background: var(--medium); }
+    .diff-hard { background: var(--hard); }
+    /* Search Bar */
+    #search-bar {
+      width: 100%;
+      max-width: 450px;
+      padding: 0.6em 1em;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 2em;
+      margin-top: 0.5em;
+      outline: none;
+      transition: border 0.2s;
+    }
+    #search-bar:focus {
+      border: 1.5px solid var(--primary);
+    }
+    /* Problem details */
+    #problem-detail-container h2 {
+      margin-bottom: 0.3em;
+    }
+    .problem-description {
+      margin-bottom: 0.8em;
+      font-size: 1.07em;
+    }
+    .editor-label {
+      font-weight: 500;
+      margin-bottom: 0.25em;
+      color: #444;
+      margin-top: 1.2em;
+    }
+    .code-editor {
+      width: 100%;
+      min-height: 18em;
+      background: var(--editor-bg);
+      color: var(--editor-fg);
+      font-family: 'Fira Mono', 'Consolas', monospace;
+      font-size: 1.04em;
+      border-radius: 6px;
+      border: 1.5px solid #222;
+      padding: 1.1em 1em;
+      margin-bottom: 0.7em;
+      resize: vertical;
+      outline: none;
+      box-sizing: border-box;
+    }
+    .btn {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 0.6em 1.7em;
+      font-size: 1em;
+      font-weight: 500;
+      margin-right: 1em;
+      margin-bottom: 0.7em;
+      cursor: pointer;
+      transition: background 0.13s;
+    }
+    .btn:active, .btn:hover {
+      background: var(--primary-dark);
+    }
+    .result-area {
+      background: var(--result-bg);
+      color: var(--result-fg);
+      border-radius: 6px;
+      padding: 1em 1.2em;
+      margin-top: 1em;
+      white-space: pre-wrap;
+      font-family: 'Fira Mono', 'Consolas', monospace;
+      min-height: 3em;
+    }
+    /* Login/Register Form */
+    .auth-container {
+      background: var(--card-bg);
+      box-shadow: var(--shadow);
+      max-width: 350px;
+      margin: 4em auto 0 auto;
+      padding: 2.5em 2.2em 2em 2.2em;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      text-align: center;
+      position: relative;
+    }
+    .auth-container h2 {
+      margin-bottom: 1.6em;
+      color: var(--primary-dark);
+      font-size: 1.3em;
+      font-weight: 600;
+    }
+    .auth-form input {
+      width: 90%;
+      padding: 0.7em;
+      margin-bottom: 1.2em;
+      border: 1px solid #bbb;
+      border-radius: 4px;
+      font-size: 1em;
+      outline: none;
+      transition: border 0.2s;
+    }
+    .auth-form input:focus {
+      border: 1.5px solid var(--primary);
+    }
+    .auth-form button {
+      width: 100%;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 0.75em;
+      font-size: 1em;
+      font-weight: 500;
+      margin-bottom: 0.8em;
+      cursor: pointer;
+      transition: background 0.13s;
+    }
+    .auth-form button:hover {
+      background: var(--primary-dark);
+    }
+    .switch-auth {
+      color: var(--primary-dark);
+      background: none;
+      border: none;
+      cursor: pointer;
+      margin-top: .2em;
+      text-decoration: underline;
+      font-size: 1em;
+      margin-bottom: 0.2em;
+    }
+    .auth-error {
+      color: var(--hard);
+      margin-bottom: 0.8em;
+      min-height: 1.3em;
+    }
+    /* Responsive */
+    @media only screen and (max-width: 650px) {
+      .container { padding: 0 1vw; }
+      .problem-card { padding: 0.7em 0.5em; }
+      .auth-container { padding: 1.3em 0.7em 1em 0.7em; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="container" style="display:flex;align-items:center;justify-content:space-between;">
+      <a class="brand" href="#" onclick="showSection('home')">CodePlatform</a>
+      <nav id="main-nav">
+        <a href="#" id="nav-problems" onclick="showSection('home')" class="active">Problems</a>
+        <a href="#" id="nav-profile" style="display:none;">Profile</a>
+        <button id="nav-logout" style="display:none;">Logout</button>
+        <button id="nav-login" onclick="showSection('login')">Login</button>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Problem List (Home) -->
+    <div class="main" id="home-section">
+      <input id="search-bar" type="text" placeholder="Search problems..." autocomplete="off"/>
+      <div id="problem-list"></div>
+    </div>
+
+    <!-- Problem Detail Page -->
+    <div class="main" id="detail-section">
+      <div id="problem-detail-container"></div>
+      <div class="editor-label">Code Editor</div>
+      <textarea id="code-editor" class="code-editor" spellcheck="false"></textarea>
+      <br/>
+      <label style="margin-bottom:0.5em;font-weight:bold;">Language:
+        <select id="language-select">
+          <option value="python">Python</option>
+          <option value="cpp">C++</option>
+          <option value="java">Java</option>
+          <!-- Add more as your backend supports -->
+        </select>
+      </label>
+      <br/>
+      <button class="btn" id="run-btn">Run</button>
+      <button class="btn" id="submit-btn">Submit</button>
+      <div class="result-area" id="result-area"></div>
+    </div>
+
+    <!-- Login/Register -->
+    <div class="main" id="login-section">
+      <div class="auth-container" id="auth-container">
+        <h2 id="auth-title">Login</h2>
+        <form class="auth-form" id="login-form" autocomplete="off">
+          <input type="text" id="login-username" placeholder="Username" required autocomplete="username"/>
+          <input type="password" id="login-password" placeholder="Password" required autocomplete="current-password"/>
+          <div class="auth-error" id="login-error"></div>
+          <button type="submit">Login</button>
+        </form>
+        <form class="auth-form" id="register-form" style="display:none;" autocomplete="off">
+          <input type="text" id="register-username" placeholder="Username" required autocomplete="username"/>
+          <input type="email" id="register-email" placeholder="Email" required autocomplete="email"/>
+          <input type="password" id="register-password" placeholder="Password" required autocomplete="new-password"/>
+          <div class="auth-error" id="register-error"></div>
+          <button type="submit">Register</button>
+        </form>
+        <button class="switch-auth" id="switch-auth-btn">Create an account</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---- CONFIG ----
+    const API_BASE = 'http://localhost:3000'; // Change as per your backend!
+    // ---- UI NAVIGATION ----
+    const SECTIONS = {
+      home: document.getElementById('home-section'),
+      detail: document.getElementById('detail-section'),
+      login: document.getElementById('login-section')
+    };
+    function showSection(section) {
+      Object.values(SECTIONS).forEach(s => s.classList.remove('active'));
+      if (SECTIONS[section]) SECTIONS[section].classList.add('active');
+      document.querySelectorAll('#main-nav a').forEach(a => a.classList.remove('active'));
+      if (section === 'home') document.getElementById('nav-problems').classList.add('active');
+      if (section === 'login') {
+        document.getElementById('nav-login').style.display = 'none';
+        document.getElementById('nav-logout').style.display = 'none';
+        document.getElementById('nav-profile').style.display = 'none';
+      } else if (isLoggedIn()) {
+        document.getElementById('nav-login').style.display = 'none';
+        document.getElementById('nav-logout').style.display = '';
+        document.getElementById('nav-profile').style.display = '';
+      } else {
+        document.getElementById('nav-login').style.display = '';
+        document.getElementById('nav-logout').style.display = 'none';
+        document.getElementById('nav-profile').style.display = 'none';
+      }
+      if (section === 'home') setTimeout(() => document.getElementById('search-bar').focus(), 150);
+    }
+    // ---- AUTH ----
+    function setToken(token) { localStorage.setItem('token', token); }
+    function getToken() { return localStorage.getItem('token'); }
+    function isLoggedIn() { return !!getToken(); }
+    function logout() {
+      localStorage.removeItem('token');
+      showSection('login');
+      loadProblems();
+    }
+    document.getElementById('nav-logout').onclick = logout;
+
+    // ---- LOGIN/REGISTER HANDLING ----
+    let isLoginMode = true;
+    function switchAuthMode() {
+      isLoginMode = !isLoginMode;
+      document.getElementById('login-form').style.display = isLoginMode ? '' : 'none';
+      document.getElementById('register-form').style.display = isLoginMode ? 'none' : '';
+      document.getElementById('auth-title').innerText = isLoginMode ? 'Login' : 'Register';
+      document.getElementById('switch-auth-btn').innerText = isLoginMode ? 'Create an account' : 'Already have an account? Log in';
+      document.getElementById('login-error').innerText = '';
+      document.getElementById('register-error').innerText = '';
+    }
+    document.getElementById('switch-auth-btn').onclick = switchAuthMode;
+    document.getElementById('login-form').onsubmit = async function(e) {
+      e.preventDefault();
+      const username = document.getElementById('login-username').value.trim();
+      const password = document.getElementById('login-password').value;
+      document.getElementById('login-error').innerText = '';
+      try {
+        const res = await fetch(`${API_BASE}/user/login`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
+        if (data.token) {
+          setToken(data.token);
+          showSection('home');
+          loadProblems();
+        } else {
+          document.getElementById('login-error').innerText = data.message || 'Invalid credentials';
+        }
+      } catch {
+        document.getElementById('login-error').innerText = 'Network error!';
+      }
+    };
+    document.getElementById('register-form').onsubmit = async function(e) {
+      e.preventDefault();
+      const username = document.getElementById('register-username').value.trim();
+      const user_email = document.getElementById('register-email').value.trim();
+      const password = document.getElementById('register-password').value;
+      document.getElementById('register-error').innerText = '';
+      try {
+        const res = await fetch(`${API_BASE}/user/register`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ username, user_email, password })
+        });
+        const data = await res.json();
+        if (data.user) {
+          // Registration successful, auto-login
+          alert("Registration successful! Please login.");
+          switchAuthMode();
+        } else {
+          document.getElementById('register-error').innerText = data.message || 'Registration failed';
+        }
+      } catch {
+        document.getElementById('register-error').innerText = 'Network error!';
+      }
+    };
+
+    // ---- PROBLEM LIST ----
+    async function fetchProblems(query = '') {
+      // Your backend doesn't have a "get all" endpoint. We'll fetch a few by guessing ids 1..10 unless you add a list endpoint.
+      // For demo, we fetch id 1..10 and filter by search.
+      const promises = [];
+      for(let i=1;i<=10;i++) {
+        promises.push(fetch(`${API_BASE}/Question/question?id=${i}`).then(r => r.ok ? r.json() : null));
+      }
+      const all = (await Promise.all(promises)).filter(Boolean);
+      if (!query) return all;
+      return all.filter(p => (p.question||'').toLowerCase().includes(query.toLowerCase()));
+    }
+    async function loadProblems() {
+      if (!isLoggedIn()) {
+        showSection('login');
+        return;
+      }
+      showSection('home');
+      const searchVal = document.getElementById('search-bar').value.trim();
+      let problems = [];
+      try {
+        problems = await fetchProblems(searchVal);
+      } catch {
+        document.getElementById('problem-list').innerHTML = '<div style="color:var(--hard)">Failed to load problems.</div>';
+        return;
+      }
+      const container = document.getElementById('problem-list');
+      if (!problems.length) {
+        container.innerHTML = '<div style="margin-top:2em;color:#555">No problems found.</div>';
+        return;
+      }
+      container.innerHTML = problems.map(p => `
+        <div class="problem-card">
+          <a class="problem-title" href="#" onclick="loadProblemDetail('${p.quesid}');return false;">${p.question.slice(0,60)}...</a>
+          <div class="problem-meta">
+            <span class="diff-tag diff-medium">Coding</span>
+          </div>
+        </div>
+      `).join('');
+    }
+    document.getElementById('search-bar').oninput = loadProblems;
+
+    // ---- PROBLEM DETAILS ----
+    async function fetchProblem(id) {
+      const res = await fetch(`${API_BASE}/Question/question?id=${id}`, {
+        headers: { 'Authorization': `Bearer ${getToken()}` }
+      });
+      return res.json();
+    }
+    function getDefaultCode(problem) {
+      return '// Write your solution here\n';
+    }
+    async function loadProblemDetail(id) {
+      if (!isLoggedIn()) {
+        showSection('login');
+        return;
+      }
+      showSection('detail');
+      document.getElementById('problem-detail-container').innerHTML = 'Loading...';
+      document.getElementById('code-editor').value = '';
+      document.getElementById('result-area').innerText = '';
+      let problem;
+      try {
+        problem = await fetchProblem(id);
+      } catch {
+        document.getElementById('problem-detail-container').innerHTML = '<span style="color:var(--hard)">Failed to load problem.</span>';
+        return;
+      }
+      document.getElementById('problem-detail-container').innerHTML = `
+        <h2>Question ${problem.quesid}</h2>
+        <div class="problem-description">${problem.question}</div>
+        <div><span class="diff-tag diff-medium">Coding</span></div>
+      `;
+      document.getElementById('code-editor').value = getDefaultCode(problem);
+      document.getElementById('run-btn').onclick = () => handleCodeRunOrSubmit(problem.quesid, true);
+      document.getElementById('submit-btn').onclick = () => handleCodeRunOrSubmit(problem.quesid, false);
+    }
+
+    // ---- SUBMIT/RUN HANDLING ----
+    async function runSolution(userId, questionId, language, solution) {
+      const res = await fetch(`${API_BASE}/solutions/run`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ userId, questionId, language, solution })
+      });
+      return res.json();
+    }
+    async function submitSolution(userId, questionId, language, solution) {
+      const res = await fetch(`${API_BASE}/solutions/submit`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ userId, questionId, language, solution })
+      });
+      return res.json();
+    }
+    function getUserIdFromToken() {
+      // JWT decode to get userid (naive, for demo)
+      try {
+        const token = getToken();
+        if (!token) return null;
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload.userid;
+      } catch { return null; }
+    }
+    async function handleCodeRunOrSubmit(questionId, isRun) {
+      const code = document.getElementById('code-editor').value;
+      const language = document.getElementById('language-select').value;
+      const userId = getUserIdFromToken();
+      document.getElementById('result-area').innerText = isRun ? 'Running...' : 'Submitting...';
+      let result;
+      try {
+        if(isRun) {
+          result = await runSolution(userId, questionId, language, code);
+          document.getElementById('result-area').innerHTML =
+            result.error
+            ? `<b style="color:var(--hard)">Error</b>\n${result.error}`
+            : `<b style="color:var(--easy)">Output</b>\n${result.output || JSON.stringify(result)}`;
+        } else {
+          result = await submitSolution(userId, questionId, language, code);
+          if(result.results){
+            let html = '';
+            result.results.forEach((r,i) => {
+              html += `<div>
+                <b>Testcase ${i+1}:</b> ${r.error ? `<span style="color:var(--hard)">Error</span>` : `<span style="color:var(--easy)">Passed</span>`}<br>
+                <b>Expected:</b> ${r.expected_output}<br>
+                <b>Output:</b> ${r.output || r.error || 'No Output'}
+              </div><hr>`;
+            });
+            document.getElementById('result-area').innerHTML = html;
+          } else {
+            document.getElementById('result-area').innerHTML = `<b style="color:var(--hard)">Error</b>\n${result.error || JSON.stringify(result)}`;
+          }
+        }
+      } catch {
+        document.getElementById('result-area').innerText = 'Network error!';
+      }
+    }
+
+    // ---- INIT ----
+    function init() {
+      if (isLoggedIn()) {
+        showSection('home');
+        loadProblems();
+      } else {
+        showSection('login');
+      }
+    }
+    window.onload = init;
+
+    document.querySelector('.brand').onclick = function() {
+      if (isLoggedIn()) { showSection('home'); loadProblems(); }
+      else { showSection('login'); }
+      return false;
+    };
+  </script>
+</body>
+</html>
