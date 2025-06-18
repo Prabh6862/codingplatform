@@ -1,0 +1,76 @@
+quesid, question, category
+CPP001, Print “Hello, World!” in C++, Basics
+CPP002, Sum of two numbers, Basics
+CPP003, Check if a number is even or odd, Conditionals
+CPP004, Find factorial of a number using recursion, Recursion
+CPP005, Check if a number is prime, Math / Loops
+CPP006, Reverse a number, Math / Loops
+CPP007, Count digits in a number, Math / Loops
+CPP008, Palindrome number check, Math / Logic
+CPP009, Print Fibonacci sequence (n terms), Recursion / Loops
+CPP010, Find the largest element in an array, Arrays
+CPP011, Linear search in an array, Arrays / Search
+CPP012, Binary search in a sorted array, Arrays / Search
+CPP013, Sort an array using bubble sort, Sorting
+CPP014, Sort an array using STL sort(), STL / Sorting
+CPP015, Find the frequency of each element in an array, Arrays / Hashing
+CPP016, Remove duplicates from a vector, Vectors / STL
+CPP017, Count occurrences of a character in a string, Strings
+CPP018, Reverse a string using stack, Strings / Stack
+CPP019, Convert lowercase to uppercase string, Strings
+CPP020, Check if a string is palindrome, Strings / Logic
+CPP021, Swap two numbers using pointers, Pointers
+CPP022, Pass by reference example, Functions
+CPP023, Find GCD of two numbers, Math / GCD
+CPP024, Use map to count word frequency in a sentence, STL / Map
+CPP025, Implement basic calculator using switch, Control Structures
+CPP026, Write recursive power function (a^b), Recursion
+CPP027, Generate all subsets of a string, Strings / Backtracking
+CPP028, Compute nCr (combinations), Math / Combinatorics
+CPP029, Implement a class Student with private members and public methods, OOP / Classes
+CPP030, Create constructor and destructor examples, OOP / Constructor
+CPP031, Overload + operator for a complex number class, OOP / Operator Overloading
+CPP032, Demonstrate function overloading in C++, OOP / Functions
+CPP033, Find sum of digits of a number (recursively), Recursion
+CPP034, Check if a string is an anagram, Strings / Sorting
+CPP035, Count vowels and consonants in a string, Strings
+CPP036, Find duplicate characters in a string, Strings / Hashing
+CPP037, Find second largest number in array, Arrays
+CPP038, Merge two sorted arrays, Arrays / Merge
+CPP039, Find missing number in array of size n-1 (1 to n), Arrays / Logic
+CPP040, Rotate array by k positions, Arrays / Rotation
+CPP041, Implement binary search using recursion, Recursion / Search
+CPP042, Sort a vector of pairs by second value, STL / Sorting
+CPP043, Count unique words in a paragraph, Strings / Map
+CPP044, Convert integer to binary string, Bit Manipulation
+CPP045, Count number of set bits in an integer, Bit Manipulation
+CPP046, Reverse words in a sentence, Strings / Logic
+CPP047, Find intersection of two arrays, Arrays / Set
+CPP048, Find union of two arrays, Arrays / Set
+CPP049, Create a class for BankAccount with deposit and withdraw, OOP / Classes
+CPP050, Demonstrate use of this pointer, OOP / Pointers
+CPP051, Implement stack using array, Stack / Array
+CPP052, Implement queue using array, Queue / Array
+CPP053, Implement stack using STL stack, Stack / STL
+CPP054, Implement queue using STL queue, Queue / STL
+CPP055, Evaluate postfix expression using stack, Stack / Expression
+CPP056, Implement linked list with insert and delete operations, Linked List
+CPP057, Detect cycle in linked list, Linked List
+CPP058, Reverse a linked list (iterative and recursive), Linked List / Recursion
+CPP059, Merge two sorted linked lists, Linked List / Merge
+CPP060, Implement binary search tree (BST), Trees / BST
+CPP061, Find height of a binary tree, Trees / Recursion
+CPP062, Inorder traversal of binary tree (recursive & iterative), Trees / Traversal
+CPP063, Level order traversal using queue, Trees / Queue
+CPP064, Check if a tree is balanced, Trees / Balance
+CPP065, Implement min-heap using priority_queue, Heap / STL
+CPP066, Dijkstra’s algorithm using STL, Graph / Dijkstra
+CPP067, Topological sort using DFS, Graph / Topological Sort
+CPP068, Detect cycle in a graph (DFS), Graph / Cycle
+CPP069, Implement graph using adjacency list, Graph / Adjacency List
+CPP070, Flood Fill Algorithm, Graph / DFS
+CPP071, LRU Cache using unordered_map and list, LRU / STL
+CPP072, Sliding Window Maximum, Sliding Window
+CPP073, Kth smallest element using min-heap, Heap / Kth Element
+CPP074, Longest Substring Without Repeating Characters, Strings / Hashing
+CPP075, Implement Trie (Prefix Tree), Trie / Strings
