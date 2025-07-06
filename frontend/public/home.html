@@ -1,0 +1,99 @@
+<!-- home.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+  </head>
+
+  <body>
+    <nav
+      style="
+        background: #333;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      "
+    >
+      <div>
+        <a
+          href="home.html"
+          style="color: white; margin-right: 20px; text-decoration: none"
+          >🏠 Home</a
+        >
+        <a href="problem.html?id=1" style="color: white; text-decoration: none"
+          >❓ Sample Problem</a
+        >
+      </div>
+      <div>
+        <span id="userGreeting" style="color: white; margin-right: 10px"></span>
+        <a
+          id="authLink"
+          href="auth.html"
+          style="color: white; text-decoration: none; margin-right: 10px"
+          hidden
+          >🔐 Login/Register</a
+        >
+        <button
+          id="logoutBtn"
+          onclick="logout()"
+          style="padding: 5px 10px; cursor: pointer"
+          hidden
+        >
+          🚪 Logout
+        </button>
+      </div>
+    </nav>
+
+    <script>
+      function logout() {
+        localStorage.removeItem("token");
+        alert("Logged out.");
+        window.location.href = "auth.html";
+      }
+
+      // Wait until DOM is fully ready
+      window.addEventListener("DOMContentLoaded", () => {
+        const token = localStorage.getItem("token");
+        const authLink = document.getElementById("authLink");
+        const logoutBtn = document.getElementById("logoutBtn");
+        const userGreeting = document.getElementById("userGreeting");
+
+        if (token) {
+          // Show logout button only
+          logoutBtn.hidden = false;
+          authLink.hidden = true;
+
+          try {
+            const payload = JSON.parse(atob(token.split(".")[1]));
+            const username = payload.username || "User";
+            userGreeting.textContent = `👋 ${username}`;
+          } catch {
+            userGreeting.textContent = "👋 Logged In";
+          }
+        } else {
+          // Show login link only
+          authLink.hidden = false;
+          logoutBtn.hidden = true;
+          userGreeting.textContent = "";
+        }
+      });
+    </script>
+
+    <h1>Problem List</h1>
+    <ul id="problemList"></ul>
+    <script>
+      for (let i = 1; i <= 10; i++) {
+        fetch(`http://localhost:3000/Question/question?id=${i}`)
+          .then((res) => res.json())
+          .then((data) => {
+            const li = document.createElement("li");
+            li.innerHTML = `<a href="problem.html?id=${data.quesid}">${data.question}</a>`;
+            document.getElementById("problemList").appendChild(li);
+          });
+      }
+    </script>
+  </body>
+</html>

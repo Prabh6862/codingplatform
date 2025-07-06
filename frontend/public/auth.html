@@ -1,0 +1,128 @@
+<!-- auth.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Auth</title>
+  </head>
+
+  <body>
+    <nav
+      style="
+        background: #333;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      "
+    >
+      <div>
+        <a
+          href="home.html"
+          style="color: white; margin-right: 20px; text-decoration: none"
+          >🏠 Home</a
+        >
+        <a href="problem.html?id=1" style="color: white; text-decoration: none"
+          >❓ Sample Problem</a
+        >
+      </div>
+      <div>
+        <span id="userGreeting" style="color: white; margin-right: 10px"></span>
+        <a
+          id="authLink"
+          href="auth.html"
+          style="color: white; text-decoration: none; margin-right: 10px"
+          hidden
+          >🔐 Login/Register</a
+        >
+        <button
+          id="logoutBtn"
+          onclick="logout()"
+          style="padding: 5px 10px; cursor: pointer"
+          hidden
+        >
+          🚪 Logout
+        </button>
+      </div>
+    </nav>
+
+    <script>
+      function logout() {
+        localStorage.removeItem("token");
+        alert("Logged out.");
+        window.location.href = "auth.html";
+      }
+
+      // Wait until DOM is fully ready
+      window.addEventListener("DOMContentLoaded", () => {
+        const token = localStorage.getItem("token");
+        const authLink = document.getElementById("authLink");
+        const logoutBtn = document.getElementById("logoutBtn");
+        const userGreeting = document.getElementById("userGreeting");
+
+        if (token) {
+          // Show logout button only
+          logoutBtn.hidden = false;
+          authLink.hidden = true;
+
+          try {
+            const payload = JSON.parse(atob(token.split(".")[1]));
+            const username = payload.username || "User";
+            userGreeting.textContent = `👋 ${username}`;
+          } catch {
+            userGreeting.textContent = "👋 Logged In";
+          }
+        } else {
+          // Show login link only
+          authLink.hidden = false;
+          logoutBtn.hidden = true;
+          userGreeting.textContent = "";
+        }
+      });
+    </script>
+
+    <h2>Register</h2>
+    <form id="registerForm">
+      <input type="text" placeholder="Username" name="username" required />
+      <input type="email" placeholder="Email" name="user_email" required />
+      <input type="password" placeholder="Password" name="password" required />
+      <button type="submit">Register</button>
+    </form>
+    <h2>Login</h2>
+    <form id="loginForm">
+      <input type="text" placeholder="Username" name="username" required />
+      <input type="password" placeholder="Password" name="password" required />
+      <button type="submit">Login</button>
+    </form>
+
+    <script>
+      document.getElementById("registerForm").onsubmit = async (e) => {
+        e.preventDefault();
+        const form = new FormData(e.target);
+        const data = Object.fromEntries(form.entries());
+        const res = await fetch("http://localhost:3000/user/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+        alert(await res.text());
+      };
+
+      document.getElementById("loginForm").onsubmit = async (e) => {
+        e.preventDefault();
+        const form = new FormData(e.target);
+        const data = Object.fromEntries(form.entries());
+        const res = await fetch("http://localhost:3000/user/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+        const result = await res.json();
+        localStorage.setItem("token", result.token);
+        alert("Login successful!");
+        window.location.href = "home.html";
+      };
+    </script>
+  </body>
+</html>

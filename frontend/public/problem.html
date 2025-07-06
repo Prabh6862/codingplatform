@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Problem</title>
+    <style>
+      textarea {
+        width: 100%;
+        font-family: monospace;
+      }
+      pre {
+        background: #f0f0f0;
+        padding: 10px;
+        overflow-x: auto;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav
+      style="
+        background: #333;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      "
+    >
+      <div>
+        <a
+          href="home.html"
+          style="color: white; margin-right: 20px; text-decoration: none"
+          >🏠 Home</a
+        >
+        <a href="problem.html?id=1" style="color: white; text-decoration: none"
+          >❓ Sample Problem</a
+        >
+      </div>
+      <div>
+        <span id="userGreeting" style="color: white; margin-right: 10px"></span>
+        <a
+          id="authLink"
+          href="auth.html"
+          style="color: white; text-decoration: none; margin-right: 10px"
+          hidden
+          >🔐 Login/Register</a
+        >
+        <button
+          id="logoutBtn"
+          onclick="logout()"
+          style="padding: 5px 10px; cursor: pointer"
+          hidden
+        >
+          🚪 Logout
+        </button>
+      </div>
+    </nav>
+
+    <script>
+      function logout() {
+        localStorage.removeItem("token");
+        alert("Logged out.");
+        window.location.href = "auth.html";
+      }
+
+      // Wait until DOM is fully ready
+      window.addEventListener("DOMContentLoaded", () => {
+        const token = localStorage.getItem("token");
+        const authLink = document.getElementById("authLink");
+        const logoutBtn = document.getElementById("logoutBtn");
+        const userGreeting = document.getElementById("userGreeting");
+
+        if (token) {
+          // Show logout button only
+          logoutBtn.hidden = false;
+          authLink.hidden = true;
+
+          try {
+            const payload = JSON.parse(atob(token.split(".")[1]));
+            const username = payload.username || "User";
+            userGreeting.textContent = `👋 ${username}`;
+          } catch {
+            userGreeting.textContent = "👋 Logged In";
+          }
+        } else {
+          // Show login link only
+          authLink.hidden = false;
+          logoutBtn.hidden = true;
+          userGreeting.textContent = "";
+        }
+      });
+    </script>
+
+    <h2 id="questionTitle">Loading...</h2>
+
+    <label for="language">Language:</label>
+    <select id="language">
+      <option value="cpp">C++</option>
+      <option value="python">Python</option>
+    </select>
+
+    <br /><br />
+    <textarea
+      id="solution"
+      rows="15"
+      placeholder="Write your code here..."
+    ></textarea>
+    <br />
+
+    <!-- Use onclick, not inside a form. -->
+    <button id="runBtn">Run</button>
+    <button id="submitBtn">Submit</button>
+
+    <h3>Output:</h3>
+    <pre id="output">Waiting for execution...</pre>
+
+    <script>
+      // Prevent Live Server auto-reload from annoying you
+      if (typeof window.__LIVE_SERVER__ !== "undefined") {
+        window.__LIVE_SERVER__.enable = false;
+      }
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const questionId = urlParams.get("id");
+      let testcases = [];
+
+      // Load the question
+      fetch(`http://localhost:3000/Question/question?id=${questionId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          document.getElementById("questionTitle").textContent = data.question;
+          testcases = JSON.parse(data.testcases);
+        })
+        .catch((err) => {
+          document.getElementById("questionTitle").textContent =
+            "Failed to load question.";
+          console.error(err);
+        });
+
+      async function runCode() {
+        const token = localStorage.getItem("token");
+        if (!token) return alert("Please log in first.");
+
+        const lang = document.getElementById("language").value;
+        const code = document.getElementById("solution").value;
+
+        try {
+          const res = await fetch("http://localhost:3000/Solution/run", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              userId: 2,
+              questionId: parseInt(questionId),
+              language: lang,
+              solution: code,
+              testcases: testcases.map((tc) => ({ input: tc.input })),
+            }),
+          });
+
+          const result = await res.json();
+          document.getElementById("output").textContent = JSON.stringify(
+            result,
+            null,
+            2
+          );
+        } catch (error) {
+          document.getElementById("output").textContent = "Error during run.";
+          console.error(error);
+        }
+      }
+
+      async function submitCode() {
+        const token = localStorage.getItem("token");
+        if (!token) return alert("Please log in first.");
+
+        const lang = document.getElementById("language").value;
+        const code = document.getElementById("solution").value;
+
+        try {
+          const res = await fetch("http://localhost:3000/Solution/submit", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              userId: 2,
+              questionId: parseInt(questionId),
+              language: lang,
+              solution: code,
+            }),
+          });
+
+          const result = await res.json();
+          document.getElementById("output").textContent = JSON.stringify(
+            result,
+            null,
+            2
+          );
+        } catch (error) {
+          document.getElementById("output").textContent =
+            "Error during submit.";
+          console.error(error);
+        }
+      }
+
+      // Register click listeners on buttons
+      document.getElementById("runBtn").addEventListener("click", (e) => {
+        e.preventDefault(); // Just in case!
+        runCode();
+      });
+
+      document.getElementById("submitBtn").addEventListener("click", (e) => {
+        e.preventDefault(); // Just in case!
+        submitCode();
+      });
+    </script>
+  </body>
+</html>
